@@ -1,0 +1,80 @@
+<app-navbar></app-navbar>
+
+<div class="container mt-4">
+    <div class="row d-flex justify-content-center align-items-center h-100">
+        <div class="col-12 col-md-8 col-lg-6 col-xl-5">
+            <div class="card bg-dark text-white border border-5" style="border-radius: 1rem;">
+                <div class="card-body px-5 pt-4 text-center">
+                    <div class="mb-3">
+
+                        <h2 class="fw-bold mb-3">Registrarse</h2>
+
+                        <form #registerForm="ngForm" (ngSubmit)="register()">
+
+                            <span class="requiredData">
+                                <p *ngIf="!name.valid && name.touched" class="text-start">Campo obligatorio</p>
+                            </span>
+
+                            <div class="input-group form-outline form-white mb-4">
+                                <input [(ngModel)]="company.name" #name="ngModel" name="name" class="form-control"
+                                    placeholder="Nombre" aria-label="Nombre" id="name" required>
+                                <input [(ngModel)]="company.typeOfCompany" name="typeOfCompany" class="form-control"
+                                    placeholder="Tipo de empresa" aria-label="Tipo de empresa">
+                            </div>
+
+                            <span class="requiredData">
+                                <p *ngIf="!username.valid && username.touched" class="text-start">Campo obligatorio</p>
+                            </span>
+
+                            <div class="form-outline form-white mb-4">
+                                <input [(ngModel)]="company.username" #username="ngModel" name="username"
+                                    class="form-control" placeholder="Usuario" aria-label="Usuario" required>
+                            </div>
+
+                            <span class="requiredData">
+                                <p *ngIf="!email.valid && email.touched" class="text-start">Campo obligatorio</p>
+                            </span>
+
+                            <div class="form-outline form-white mb-4">
+                                <input [(ngModel)]="company.email" #email="ngModel" name="email" type="email"
+                                    class="form-control" placeholder="Correo electronico"
+                                    aria-label="Correo electronico" required>
+                            </div>
+
+                            <span class="requiredData">
+                                <p *ngIf="!password.valid && password.touched" class="text-start">Campo obligatorio</p>
+                            </span>
+
+                            <div class="input-group form-outline form-white mb-4">
+                                <input (keyup)="checkPassword()" [(ngModel)]="company.password" #password="ngModel"
+                                    name="password" type="password" class="form-control" placeholder="Contraseña"
+                                    aria-label="Contraseña" required>
+                                <input (keyup)="checkPassword()" [(ngModel)]="repeatPass" name="repeatPass"
+                                    type="password" class="form-control" placeholder="Repite tu contraseña"
+                                    aria-label="Repite tu contraseña" required>
+                            </div>
+                            <div class="form-outline form-white mb-4">
+                                <input [(ngModel)]="company.phone" name="phone" class="form-control form-control"
+                                    placeholder="Número telefónico" aria-label="Número telefónico">
+                            </div>
+                            <p>
+                                <input ngModel name="checkboxTerms" class="form-check-input " type="checkbox"
+                                    required>
+                                <label class="form-check-label ms-2">Aceptar <a
+                                        href="https://en.wikipedia.org/wiki/Contractual_term" target="_blank"
+                                        rel="noopener noreferrer">terminos y condiciones</a></label>
+                            </p>
+                            <button [disabled]="!registerForm.form.valid" class="btn btn-outline-light btn-lg px-5"
+                                type="submit">Registrarse</button>
+                        </form>
+                    </div>
+
+                    <div>
+                        <p>¿Ya tienes una cuenta? <a routerLink="/login" class="text-white-50 fw-bold">Inicia sesión</a>
+                        </p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>

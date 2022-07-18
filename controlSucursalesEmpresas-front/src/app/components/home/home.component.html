@@ -1,0 +1,26 @@
+<app-navbar></app-navbar>
+
+<div class="html-responsive" style="margin-top: -53px;">
+    <div class="body-content vh-100">
+        <div class="bgimg w3-display-container w3-animate-opacity w3-text-white">
+            <div class="w3-display-middle">
+                <h1 id="homeHeader" class="w3-jumbo w3-animate-top">Control de sucursales de empresas</h1>
+                <hr class="w3-border-green" style="margin: auto;">
+                <p class="w3-large w3-center pt-2" *ngIf="!token">
+                    <button routerLink="/login" type="button" class="btn btn-lg btn-outline-light me-2"
+                        style="width: 150px;">Inicia sesión</button>
+                    <button routerLink="/register" type="button" class="btn btn-lg btn-outline-light"
+                        style="width: 150px;">Registrate</button>
+                </p>
+                <p class="w3-large w3-center pt-2" *ngIf="token && companyData.role == 'ADMIN'">
+                    <button routerLink="/admin/users" type="button" class="btn btn-lg btn-outline-light me-2"
+                        style="width: 225px;">Administrar empresas</button>
+                </p>
+                <p class="w3-large w3-center pt-2" *ngIf="token && companyData.role == 'COMPANY'">
+                    <button routerLink="/controlPanel" type="button" class="btn btn-lg btn-outline-light me-2"
+                        style="width: 200px;">Panel de control</button>
+                </p>
+            </div>
+        </div>
+    </div>
+</div>

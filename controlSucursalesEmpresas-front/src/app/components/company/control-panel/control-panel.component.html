@@ -1,0 +1,413 @@
+<app-navbar></app-navbar>
+
+<div class="container">
+    <div class="row align-items-start">
+        <div class="col">
+            <div class="text-center m-3">
+                <button class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#modalAddProduct">
+                    Agregar producto - <i class="fa-solid fa-circle-plus"></i>
+                </button>
+                <button class="btn btn-primary m-2" data-bs-toggle="modal" data-bs-target="#modalAddBranchProduct">
+                    Enviar producto - <i class="fa-solid fa-paper-plane"></i>
+                </button>
+                <!-- <div class="input-group mx-auto w-25 mt-2 ">
+                    <input [(ngModel)]="search" type="text" class="form-control" placeholder="Buscar producto" aria-describedby="btnSearch">
+                </div> -->
+            </div>
+            <hr>
+            <div class="table-responsive-xxl">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre
+                                <span class="btn-group btn-group-sm" role="group">
+                                    <button (click)="getProducts_OrderByProductNameAsc()" type="button orderButtons"
+                                        class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-z-a"></i>
+                                    </button>
+                                    <button (click)="getProducts_OrderByProductNameDesc()" type="button orderButtons"
+                                        class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-a-z"></i>
+                                    </button>
+                                </span>
+                            </th>
+                            <th scope="col">Proveedor
+                                <span class="btn-group btn-group-sm" role="group">
+                                    <button (click)="getProducts_OrderByProductProviderAsc()" type="button orderButtons"
+                                        class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-z-a"></i>
+                                    </button>
+                                    <button (click)="getProducts_OrderByProductProviderDesc()"
+                                        type="button orderButtons" class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-a-z"></i>
+                                    </button>
+                                </span>
+                            </th>
+                            <th scope="col">Stock
+                                <span class="btn-group btn-group-sm" role="group">
+                                    <button (click)="getProducts_OrderByStockAsc()" type="button orderButtons"
+                                        class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-1-9"></i>
+                                    </button>
+                                    <button (click)="getProducts_OrderByStockDesc()" type="button orderButtons"
+                                        class="btn btn-secondary">
+                                        <i class="fa-solid fa-arrow-down-9-1"></i>
+                                    </button>
+                                </span>
+                            </th>
+                            <th scope="col" class="mx-auto">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let product of products">
+                            <th scope="row">{{ product.name }}</th>
+                            <td>{{ product.provider }}</td>
+                            <td>{{ product.stock }}</td>
+                            <td>
+                                <button (click)="getProduct(product._id)" class="btn btn-warning me-2"
+                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasGetProduct"
+                                    aria-controls="offcanvasGetProduct">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button (click)="deleteProduct(product._id)" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+
+        <div class="col">
+            <div class="text-center m-3">
+                <button class="btn btn-success m-2" data-bs-toggle="modal" data-bs-target="#modalAddBranchOffice">
+                    Agregar sucursal - <i class="fa-solid fa-circle-plus"></i>
+                </button>
+            </div>
+            <hr>
+            <div class="table-responsive-xxl">
+                <table class="table table-hover">
+                    <thead>
+                        <tr>
+                            <th scope="col">Nombre</th>
+                            <th scope="col">Dirección</th>
+                            <th scope="col" class="mx-auto">Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr *ngFor="let branchOffice of branchOffices">
+                            <th scope="row">{{ branchOffice.name }}</th>
+                            <td>{{ branchOffice.address }}</td>
+                            <td>
+                                <button (click)="getBranchProducts(branchOffice._id)" class="btn btn-primary me-2"
+                                    data-bs-toggle="modal" data-bs-target="#modalGetBranchProducts"
+                                    aria-controls="modalGetBranchProducts">
+                                    <i class="fa-solid fa-boxes-stacked"></i>
+                                </button>
+                                <button (click)="getBranchOffice(branchOffice._id)" class="btn btn-warning me-2"
+                                    data-bs-toggle="offcanvas" data-bs-target="#offcanvasGetBranchOffice"
+                                    aria-controls="offcanvasGetBranchOffice">
+                                    <i class="fa-solid fa-pen-to-square"></i>
+                                </button>
+                                <button (click)="deleteBranchOffice(branchOffice._id)" class="btn btn-danger">
+                                    <i class="fa-solid fa-trash"></i>
+                                </button>
+                            </td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add product-->
+<div class="modal fade" id="modalAddProduct" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form #addProductForm="ngForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input [(ngModel)]="product.name" name="name" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Provider</label>
+                        <input [(ngModel)]="product.provider" name="provider" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock</label>
+                        <input [(ngModel)]="product.stock" name="stock" type="number" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Descartar cambios
+                        </button>
+                        <button type="submit" (click)="addProduct(addProductForm)" class="btn btn-primary"
+                            data-bs-dismiss="modal">
+                            Agregar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add branch office -->
+<div class="modal fade" id="modalAddBranchOffice" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Agregar sucursal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form #addBranchOfficeForm="ngForm">
+                    <div class="mb-3">
+                        <label class="form-label">Nombre</label>
+                        <input [(ngModel)]="branchOffice.name" name="name" type="text" class="form-control">
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Dirección</label>
+                        <input [(ngModel)]="branchOffice.address" name="address" type="text" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Descartar cambios
+                        </button>
+                        <button type="submit" (click)="addBranchOffice(addBranchOfficeForm)" class="btn btn-primary"
+                            data-bs-dismiss="modal">
+                            Agregar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal add branch product -->
+<div class="modal fade" id="modalAddBranchProduct" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Enviar producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form #addBranchProductForm="ngForm">
+                    <div class="mb-3">
+                        <label class="form-label">Producto a enviar</label>
+                        <select [(ngModel)]="branchProduct.product" name="ProductName" class="form-select">
+                            <option *ngFor="let product of products" value="{{ product._id }}">{{ product.name }} |
+                                {{ product.provider }} | {{ product.stock }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Sucursal que recibe</label>
+                        <select [(ngModel)]="branchProduct.branchOffice" name="branchOfficeName" class="form-select">
+                            <option *ngFor="let branchOffice of branchOffices" value="{{ branchOffice._id }}">
+                                {{ branchOffice.name }} | {{ branchOffice.address }}
+                            </option>
+                        </select>
+                    </div>
+                    <div class="mb-3">
+                        <label class="form-label">Stock</label>
+                        <input [(ngModel)]="branchProduct.stock" name="stock" type="number" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">
+                            Descartar cambios
+                        </button>
+                        <button type="submit" (click)="addBranchProduct(addBranchProductForm)" class="btn btn-primary"
+                            data-bs-dismiss="modal">
+                            Enviar
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal get branch products -->
+<div class="modal fade" id="modalGetBranchProducts" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Productos de la sucursal</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-top: -1rem;">
+                <div class="text-center m-3">
+                    <button (click)="getBranchProducts_OrderBySales()" class="btn btn-secondary me-2"
+                        data-bs-toggle="modal" data-bs-target="#modalGetChart">
+                        Gráfica de productos mas vendidos - <i class="fa-solid fa-chart-column"></i>
+                    </button>
+                </div>
+                <hr>
+                <div class="table-responsive-xxl px-2">
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Ventas</th>
+                                <th scope="col" class="mx-auto">Acciones</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let branchProduct of branchProducts">
+                                <th scope="row" *ngIf="branchProduct.product !== null">{{ branchProduct.product.name }}
+                                </th>
+                                <td *ngIf="branchProduct.product !== null">{{ branchProduct.stock }}</td>
+                                <td *ngIf="branchProduct.product !== null">{{ branchProduct.sales }}</td>
+                                <td *ngIf="branchProduct.product !== null">
+                                    <button (click)="getBranchProduct(branchProduct._id)" type="button"
+                                        class="btn btn-primary" data-bs-toggle="modal"
+                                        data-bs-target="#modalSellBranchProducts">
+                                        <i class="fa-solid fa-dolly"></i>
+                                    </button>
+                                </td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal get chart -->
+<div class="modal fade" id="modalGetChart" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Gráfica de productos más vendidos</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body" style="margin-top: -1rem;">
+                <div class="table-responsive-xxl px-2">
+                    <div>
+                        <canvas id="myChart" width="200" height="200"></canvas>
+                    </div>
+                    <table class="table table-hover">
+                        <thead>
+                            <tr>
+                                <th scope="col">Nombre</th>
+                                <th scope="col">Stock</th>
+                                <th scope="col">Ventas</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            <tr *ngFor="let branchProduct of branchProducts">
+                                <th scope="row" *ngIf="branchProduct.product !== null">{{ branchProduct.product.name }}
+                                </th>
+                                <td *ngIf="branchProduct.product !== null">{{ branchProduct.stock }}</td>
+                                <td *ngIf="branchProduct.product !== null">{{ branchProduct.sales }}</td>
+                            </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Modal sell branch products -->
+<div class="modal fade" id="modalSellBranchProducts" tabindex="-1" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h5 class="modal-title">Vender producto</h5>
+                <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+            </div>
+            <div class="modal-body">
+                <form #sellBranchProductForm="ngForm">
+                    <div class="mb-3">
+                        <label class="form-label">Cantidad a vender</label>
+                        <input [(ngModel)]="amount" name="amount" type="number" class="form-control">
+                    </div>
+                    <div class="modal-footer">
+                        <button type="button" class="btn btn-secondary" data-bs-toggle="modal"
+                            data-bs-target="#modalGetBranchProducts">
+                            Descartar cambios
+                        </button>
+                        <button (click)="sellBranchProduct(sellBranchProductForm)" type="submit" class="btn btn-primary"
+                            data-bs-toggle="modal" data-bs-target="#modalGetBranchProducts">
+                            Vender
+                        </button>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- Offcanvas get product-->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasGetProduct" aria-labelledby="offcanvasGetProduct">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasGetProduct">Editar producto</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form (ngSubmit)="updateProduct()" *ngIf="productGetId">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input [(ngModel)]="productGetId.name" name="name" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Proveedor</label>
+                <input [(ngModel)]="productGetId.provider" name="provider" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Stock</label>
+                <input [(ngModel)]="productGetId.stock" name="stock" type="number" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">
+                    Descartar cambios
+                </button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="offcanvas">
+                    Actualizar cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>
+
+<!-- Offcanvas get branch office-->
+<div class="offcanvas offcanvas-start" tabindex="-1" id="offcanvasGetBranchOffice"
+    aria-labelledby="offcanvasGetBranchOffice">
+    <div class="offcanvas-header">
+        <h5 class="offcanvas-title" id="offcanvasGetBranchOffice">Editar sucursal</h5>
+        <button type="button" class="btn-close text-reset" data-bs-dismiss="offcanvas" aria-label="Close"></button>
+    </div>
+    <div class="offcanvas-body">
+        <form (ngSubmit)="updateBranchOffice()" *ngIf="branchOfficeGetId">
+            <div class="mb-3">
+                <label class="form-label">Nombre</label>
+                <input [(ngModel)]="branchOfficeGetId.name" name="name" type="text" class="form-control">
+            </div>
+            <div class="mb-3">
+                <label class="form-label">Proveedor</label>
+                <input [(ngModel)]="branchOfficeGetId.address" name="address" type="text" class="form-control">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-secondary" data-bs-dismiss="offcanvas">
+                    Descartar cambios
+                </button>
+                <button type="submit" class="btn btn-primary" data-bs-dismiss="offcanvas">
+                    Actualizar cambios
+                </button>
+            </div>
+        </form>
+    </div>
+</div>

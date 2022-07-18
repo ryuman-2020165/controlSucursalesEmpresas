@@ -1,0 +1,13 @@
+body {
+    font-family: 'Poppins', sans-serif;
+}
+
+body,
+h1 {
+    font-family: "Poppins", sans-serif;
+}
+
+body,
+html {
+    height: 100%;
+}
